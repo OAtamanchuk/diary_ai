@@ -1,0 +1,42 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      - db
+      - redis
+      - ollama
+    volumes:
+      - ./backend/models/hybrid_en:/app/models/hybrid_en:ro
+      - ./backend/models/hybrid_ua:/app/models/hybrid_ua:ro
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: diary
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+
+volumes:
+  postgres_data:

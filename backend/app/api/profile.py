@@ -23,5 +23,5 @@ def get_stats(
     return {
         "total_entries": total,
         "emotions": emotions,
-        "streak": 7  # можна додати логіку
+        "streak": 7 
     }

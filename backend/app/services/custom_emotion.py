@@ -3,12 +3,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from transformers import XLMRobertaModel, XLMRobertaTokenizer
-from safetensors.torch import load_file  # <-- добавляем это
+from safetensors.torch import load_file 
 from app.core.config import settings
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# === Класс гибридной модели (тот же, что при обучении) ===
 class RobertaBiLSTM(nn.Module):
     def __init__(self, model_name: str, hidden_size: int, num_labels: int):
         super().__init__()
@@ -32,15 +31,12 @@ class RobertaBiLSTM(nn.Module):
         return logits
 
 
-# === Загрузка токенайзеров ===
 tokenizer_en = XLMRobertaTokenizer.from_pretrained("xlm-roberta-base")
 tokenizer_uk = XLMRobertaTokenizer.from_pretrained("xlm-roberta-base")
 
-# === Параметры ===
 NUM_LABELS = 6
 HIDDEN_SIZE = 256
 
-# === Загрузка моделей из .safetensors ===
 model_en = RobertaBiLSTM("xlm-roberta-base", HIDDEN_SIZE, NUM_LABELS)
 device_str = "cuda" if torch.cuda.is_available() else "cpu"
 state_dict_en = load_file(f"{settings.MODEL_EN_DIR}/model.safetensors", device=device_str)
@@ -53,8 +49,6 @@ state_dict_uk = load_file(f"{settings.MODEL_UK_DIR}/model.safetensors", device=d
 model_uk.load_state_dict(state_dict_uk)
 model_uk.to(device).eval()
 
-
-# === Словари ===
 EMOJI_MAP = {
     "sadness": "😢", "joy": "😀", "love": "❤️",
     "anger": "😡", "fear": "😨", "surprise": "😮"
@@ -79,7 +73,6 @@ ADVICE_UK = {
 }
 
 
-# === Предсказание ===
 def predict_emotion(text: str, lang: str) -> Tuple[str, float, str, str]:
     tokenizer = tokenizer_en if lang == "en" else tokenizer_uk
     model = model_en if lang == "en" else model_uk

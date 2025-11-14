@@ -11,7 +11,6 @@ from datetime import date
 router = APIRouter(prefix="/entries", tags=["entries"])
 
 def analyze_and_update(entry_id: int, text: str, lang: str) -> None:
-    # своя сессия, не та, что закрылась в эндпоинте
     db = SessionLocal()
     try:
         label, score, emoji, advice = predict_emotion(text, lang)
@@ -43,7 +42,6 @@ async def create_entry(
     db.commit()
     db.refresh(entry)
 
-    # фоновая синхронная задача без передачи "живой" сессии
     bg_tasks.add_task(analyze_and_update, entry.id, entry_in.text, lang)
     return entry
 

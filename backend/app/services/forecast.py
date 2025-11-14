@@ -13,7 +13,6 @@ def predict_next_emotion(entries: List[Dict]) -> str:
     counter = Counter(recent)
     most_common = counter.most_common(1)[0][0]
 
-    # Проста логіка: якщо 3+ рази поспіль — прогнозуємо те саме
     if len(recent) >= 3 and len(set(recent[-3:])) == 1:
         return recent[-1]
 

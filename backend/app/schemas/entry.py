@@ -5,7 +5,7 @@ from pydantic import BaseModel
 class EntryCreate(BaseModel):
     text: str
     date: Optional[datetime.date] = None
-    lang: str = "en"  # en, uk, auto
+    lang: str = "en" 
 
 class EntryOut(BaseModel):
     id: int

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { api } from "../services/api"
 
 export default function Chat() {
   const [ws, setWs] = useState<WebSocket | null>(null)
@@ -7,9 +6,28 @@ export default function Chat() {
   const [input, setInput] = useState("")
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8000/api/chat/ws")
-    socket.onmessage = (msg) => setMessages(m => [...m, msg.data])
+    const token = localStorage.getItem('access_token')
+    if (!token) return
+
+    const wsUrl = `ws://localhost:8000/chat/ws?token=${token}`
+    const socket = new WebSocket(wsUrl)
+
+    socket.onopen = () => console.log('Chat connected')
+
+    socket.onmessage = (e) => {
+      setMessages(prev => [...prev, e.data]) 
+    }
+
+    socket.onerror = (err) => {
+      console.error("WebSocket error:", err)
+    }
+
+    socket.onclose = () => {
+      console.log("Chat disconnected")
+    }
+
     setWs(socket)
+
     return () => socket.close()
   }, [])
 

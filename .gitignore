@@ -1,4 +1,3 @@
-### --- PYTHON --- ###
 __pycache__/
 *.pyc
 *.pyo
@@ -8,20 +7,16 @@ __pycache__/
 *.log
 *.sqlite3
 
-# Virtual environments
 venv/
 .env/
 .env.local
 *.env
 
-### --- FASTAPI --- ###
 app/__pycache__/
 app/cache/
 celerybeat-schedule
 celerybeat.pid
 
-### --- MODELS & ML FILES --- ###
-# Удали все обученные модели из git, они слишком большие
 *.safetensors
 *.pt
 *.bin
@@ -32,12 +27,10 @@ models/
 app/models/
 backend/models/
 
-### --- DOCKER --- ###
 *.tar
 docker-data/
 docker/volumes/
 
-### --- NODE / REACT / VITE --- ###
 node_modules/
 dist/
 build/
@@ -47,19 +40,15 @@ npm-debug.log*
 yarn-debug.*
 yarn-error.*
 
-### --- FRONTEND --- ###
 frontend/node_modules/
 frontend/dist/
 frontend/build/
 
-### --- TYPESCRIPT --- ###
 *.tsbuildinfo
 
-### --- VSCODE --- ###
 .vscode/
 .idea/
 
-### --- MISC --- ###
 Thumbs.db
 *.tmp
 *.swp

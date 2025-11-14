@@ -15,7 +15,6 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     if db.query(User).filter(User.username == user_in.username).first():
         raise HTTPException(400, "Username taken")
 
-    # Проверяем длину пароля ДО хеширования
     password = user_in.password
     if len(password.encode("utf-8")) > 72:
         password = password[:72]

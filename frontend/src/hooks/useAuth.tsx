@@ -1,4 +1,3 @@
-// src/hooks/useAuth.ts
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { api } from '../services/api'
 
@@ -6,6 +5,7 @@ type User = { email: string }
 
 type AuthContextType = {
   user: User | null
+  loading: boolean
   login: (email: string, password: string) => Promise<void>
   register: (email: string, username: string, password: string) => Promise<void>
   logout: () => void
@@ -13,20 +13,19 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// ===== ПРОВАЙДЕР =====
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  // Восстанавливаем пользователя при загрузке страницы
   useEffect(() => {
     const token = localStorage.getItem('access_token')
     const email = localStorage.getItem('user_email')
     if (token && email) {
       setUser({ email })
     }
+    setLoading(false)
   }, [])
 
-  // ЛОГИН
   const login = async (email: string, password: string) => {
     const body = new URLSearchParams()
     body.set('username', email)
@@ -41,12 +40,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser({ email })
   }
 
-  // РЕГИСТРАЦИЯ
   const register = async (email: string, username: string, password: string) => {
     await api.post('/auth/register', { email, username, password })
   }
 
-  // ЛОГАУТ
   const logout = () => {
     localStorage.removeItem('access_token')
     localStorage.removeItem('user_email')
@@ -54,13 +51,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
-// ===== ХУК =====
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) {

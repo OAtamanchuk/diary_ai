@@ -1,4 +1,3 @@
-// src/services/api.ts
 import axios from 'axios'
 
 const baseURL = 'http://localhost:8000'
@@ -11,7 +10,6 @@ api.interceptors.request.use(config => {
   return config
 })
 
-// опционально — автолог аут и редирект при 401
 api.interceptors.response.use(
   r => r,
   err => {

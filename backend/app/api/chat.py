@@ -1,14 +1,22 @@
-from fastapi import APIRouter, WebSocket
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
+from jose import jwt, JWTError
+from app.core.config import settings
 import httpx
 import json
 import asyncio
 from deep_translator import GoogleTranslator
-import langdetect  # для визначення мови
+import langdetect
 
 router = APIRouter()
 
+def verify_jwt(token: str):
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        return payload.get("sub")  # user_id
+    except JWTError:
+        return None
+
 def detect_lang(text: str) -> str:
-    """Визначає мову користувача"""
     try:
         lang = langdetect.detect(text)
         if lang.startswith("uk"):
@@ -16,33 +24,42 @@ def detect_lang(text: str) -> str:
         elif lang.startswith("en"):
             return "en"
         else:
-            return "en"  # fallback
+            return "en"
     except:
         return "en"
 
-@router.websocket("/ws/chat")
-async def chat_websocket(websocket: WebSocket):
+
+@router.websocket("/chat/ws")
+async def chat_websocket(websocket: WebSocket, token: str = Query(None)):
+    if not token:
+        await websocket.close(code=403)
+        return
+
+    user_id = verify_jwt(token)
+    if not user_id:
+        await websocket.close(code=403)
+        return
+
     await websocket.accept()
-    await websocket.send_text("🤖 Вітаю! Я твій асистент у щоденнику. Як ти сьогодні почуваєшся? / Hello! How are you feeling today?")
+
+    await websocket.send_text(
+        "Вітаю! Я твій асистент у щоденнику. Як ти сьогодні почуваєшся?"
+    )
 
     async with httpx.AsyncClient(timeout=120.0) as client:
         while True:
             try:
                 user_message = await websocket.receive_text()
 
-                # === 1️⃣ Визначаємо мову ===
                 lang = detect_lang(user_message)
-
-                # === 2️⃣ Перекладаємо в англійську (якщо треба) ===
                 translated_input = (
                     GoogleTranslator(source="uk", target="en").translate(user_message)
                     if lang == "uk" else user_message
                 )
 
-                # === 3️⃣ Генеруємо відповідь через Ollama ===
                 payload = {
-                    "model": "mistral",  # або "llama3.2", якщо хочеш залишити
-                    "prompt": f"User: {translated_input}\nAssistant (empathetic, kind, supportive):",
+                    "model": "mistral",
+                    "prompt": f"User: {translated_input}\nAssistant (empathetic, warm, supportive):",
                     "stream": True
                 }
 
@@ -56,7 +73,6 @@ async def chat_websocket(websocket: WebSocket):
                             if "response" in data:
                                 buffer += data["response"]
                             if data.get("done"):
-                                # === 4️⃣ Переклад назад українською ===
                                 final_text = (
                                     GoogleTranslator(source="en", target="uk").translate(buffer)
                                     if lang == "uk" else buffer
@@ -66,7 +82,8 @@ async def chat_websocket(websocket: WebSocket):
                         except json.JSONDecodeError:
                             continue
 
+            except WebSocketDisconnect:
+                break
             except Exception as e:
                 await websocket.send_text(f"⚠️ Помилка: {str(e)}")
-                await asyncio.sleep(1)
                 break

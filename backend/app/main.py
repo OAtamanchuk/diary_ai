@@ -9,7 +9,7 @@ app = FastAPI(title="AI Diary")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # або конкретно: ["http://localhost:3000", "http://localhost:5173"]
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,7 +24,6 @@ app.include_router(chat.router)
 @app.on_event("startup")
 def startup():
     Base.metadata.create_all(bind=engine)
-    # Запуск Celery Beat (щоденно о 20:00)
     from celery.schedules import crontab
     celery.conf.beat_schedule = {
         'daily-reminder': {

@@ -7,7 +7,7 @@ export default function EntryForm({ onSubmit }: { onSubmit: (text: string, lang:
 
   const handleSubmit = () => {
     if (text.trim()) {
-      onSubmit(text, lang)   // <<< язык берётся автоматически
+      onSubmit(text, lang)   
       setText('')
     }
   }

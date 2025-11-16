@@ -27,23 +27,32 @@ def analyze_and_update(entry_id: int, text: str, lang: str) -> None:
 @router.post("/", response_model=EntryOut)
 async def create_entry(
     entry_in: EntryCreate,
-    bg_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user)
 ):
     lang = entry_in.lang if entry_in.lang != "auto" else "en"
+
+    # 1️⃣ Анализируем эмоции ДО записи
+    label, score, emoji, advice = predict_emotion(entry_in.text, lang)
+
+    # 2️⃣ Создаём запись с уже готовыми эмоциями
     entry = Entry(
         text=entry_in.text,
         date=entry_in.date or date.today(),
         lang=lang,
-        user_id=user.id
+        user_id=user.id,
+        emotion_label=label,
+        emotion_score=score,
+        advice=advice,
+        emoji=emoji
     )
+
     db.add(entry)
     db.commit()
     db.refresh(entry)
 
-    bg_tasks.add_task(analyze_and_update, entry.id, entry_in.text, lang)
     return entry
+
 
 @router.get("/", response_model=list[EntryOut])
 def get_entries(

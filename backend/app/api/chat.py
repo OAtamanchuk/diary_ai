@@ -1,89 +1,86 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
-from jose import jwt, JWTError
-from app.core.config import settings
+from fastapi import APIRouter, WebSocket
 import httpx
 import json
-import asyncio
 from deep_translator import GoogleTranslator
 import langdetect
 
 router = APIRouter()
 
-def verify_jwt(token: str):
-    try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        return payload.get("sub")  # user_id
-    except JWTError:
-        return None
 
-def detect_lang(text: str) -> str:
+def detect_lang(text: str):
+    """Визначає мову користувача."""
     try:
         lang = langdetect.detect(text)
-        if lang.startswith("uk"):
-            return "uk"
-        elif lang.startswith("en"):
-            return "en"
-        else:
-            return "en"
+        return "uk" if lang.startswith("uk") else "en"
     except:
-        return "en"
+        return "uk"
 
 
-@router.websocket("/chat/ws")
-async def chat_websocket(websocket: WebSocket, token: str = Query(None)):
+def short_text(text: str, limit=220):
+    """Обрізання відповіді моделі, щоб не писала простирадла."""
+    if len(text) <= limit:
+        return text
+    return text[:limit].rsplit(" ", 1)[0] + "..."
+
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    token = websocket.query_params.get("token")
+    page_lang = websocket.query_params.get("lang", "uk")  # <-- язык страницы
+
     if not token:
-        await websocket.close(code=403)
-        return
-
-    user_id = verify_jwt(token)
-    if not user_id:
-        await websocket.close(code=403)
+        await websocket.close()
         return
 
     await websocket.accept()
 
-    await websocket.send_text(
-        "Вітаю! Я твій асистент у щоденнику. Як ти сьогодні почуваєшся?"
-    )
+    greeting = "🤖 Вітаю! Я твій асистент. Як ти сьогодні почуваєшся?" if page_lang == "uk" \
+        else "🤖 Hello! I'm your assistant. How are you feeling today?"
 
-    async with httpx.AsyncClient(timeout=120.0) as client:
+    await websocket.send_text(greeting)
+
+    async with httpx.AsyncClient(timeout=60.0) as client:
         while True:
             try:
-                user_message = await websocket.receive_text()
+                user_msg = await websocket.receive_text()
 
-                lang = detect_lang(user_message)
-                translated_input = (
-                    GoogleTranslator(source="uk", target="en").translate(user_message)
-                    if lang == "uk" else user_message
+                # авто-визначення мови повідомлення
+                msg_lang = detect_lang(user_msg)
+
+                # переклад → англійською (якщо треба)
+                if msg_lang == "uk":
+                    translated = GoogleTranslator(source="uk", target="en").translate(user_msg)
+                else:
+                    translated = user_msg
+
+                # строгий промпт для моделі
+                system_instruction = (
+                    "You are an empathetic but concise assistant. "
+                    "Always respond in ENGLISH only. "
+                    "Do NOT use markers like 'User:' or 'Assistant:'. "
+                    "Keep responses short, supportive."
+                    "Do not give medical advicess, but just be empathetic, like a friend or trusted person."
                 )
 
                 payload = {
                     "model": "mistral",
-                    "prompt": f"User: {translated_input}\nAssistant (empathetic, warm, supportive):",
-                    "stream": True
+                    "prompt": f"{system_instruction}\nUser message: {translated}\nAssistant:",
+                    "stream": False
                 }
 
-                buffer = ""
-                async with client.stream("POST", "http://host.docker.internal:11434/api/generate", json=payload) as response:
-                    async for line in response.aiter_lines():
-                        if not line:
-                            continue
-                        try:
-                            data = json.loads(line)
-                            if "response" in data:
-                                buffer += data["response"]
-                            if data.get("done"):
-                                final_text = (
-                                    GoogleTranslator(source="en", target="uk").translate(buffer)
-                                    if lang == "uk" else buffer
-                                )
-                                await websocket.send_text(final_text.strip())
-                                buffer = ""
-                        except json.JSONDecodeError:
-                            continue
+                r = await client.post("http://host.docker.internal:11434/api/generate", json=payload)
+                raw = r.json().get("response", "").strip()
 
-            except WebSocketDisconnect:
-                break
-            except Exception as e:
-                await websocket.send_text(f"⚠️ Помилка: {str(e)}")
+                # обрізаємо занадто довгі відповіді
+                #raw = short_text(raw)
+
+                # переклад назад у мову сторінки
+                if page_lang == "uk":
+                    final_text = GoogleTranslator(source="en", target="uk").translate(raw)
+                else:
+                        final_text = raw
+
+                await websocket.send_text(final_text)
+
+            except Exception:
                 break

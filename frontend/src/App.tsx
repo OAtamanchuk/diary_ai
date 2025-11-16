@@ -34,8 +34,6 @@ export default function App() {
     <AuthProvider>
       <LanguageProvider>
         <Router>
-          <Toaster position="bottom-right" />
-
           <Header />
 
           <Routes>
@@ -74,7 +72,9 @@ export default function App() {
               }
             />
             <Route path="/" element={<Navigate to="/diary" />} />
+                      
           </Routes>
+          <Toaster position="bottom-right" />
         </Router>
       </LanguageProvider>
     </AuthProvider>

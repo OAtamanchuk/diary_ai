@@ -7,7 +7,7 @@ export default function Calendar({ entries }: any) {
   const navigate = useNavigate()
 
   const events = entries.map((e: any) => ({
-    title: e.emoji || '📝',
+    title: e.emoji,
     date: e.date,
   }))
 

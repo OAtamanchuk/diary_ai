@@ -15,6 +15,7 @@ import Profile from './pages/Profile'
 import DayView from './pages/DayView'
 import Chat from './pages/Chat'
 import Header from './components/Header'
+import LandingPage from "./pages/LandingPage"
 import { Toaster as HotToaster } from 'react-hot-toast'
 
 const Toaster = HotToaster as unknown as React.ComponentType<any>
@@ -37,6 +38,7 @@ export default function App() {
           <Header />
 
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route

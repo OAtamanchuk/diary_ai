@@ -34,8 +34,8 @@ export default function Stats({ small = false }: Props) {
       datasets: [{
         data: Object.values(stats.emotions),
         backgroundColor: [
-          '#F87171', '#34D399', '#F472B6',
-          '#FBBF24', '#60A5FA', '#A78BFA'
+          '#FF7272', '#68ED56', '#FF8EF4',
+          '#FFF58B', '#8B9EFF', '#BD97FF'
         ]
       }]
     })

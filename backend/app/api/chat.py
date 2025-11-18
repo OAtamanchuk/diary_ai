@@ -34,8 +34,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
     await websocket.accept()
 
-    greeting = "🤖 Вітаю! Я твій асистент. Як ти сьогодні почуваєшся?" if page_lang == "uk" \
-        else "🤖 Hello! I'm your assistant. How are you feeling today?"
+    greeting = "Вітаю! Я твій асистент. Як ти сьогодні почуваєшся?" if page_lang == "uk" \
+        else "Hello! I'm your assistant. How are you feeling today?"
 
     await websocket.send_text(greeting)
 

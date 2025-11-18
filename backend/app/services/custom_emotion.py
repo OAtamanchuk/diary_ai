@@ -89,3 +89,4 @@ def predict_emotion(text: str, lang: str) -> Tuple[str, float, str, str]:
     label_map = ["sadness", "joy", "love", "anger", "fear", "surprise"]
     label = label_map[pred_idx]
     return label, score, EMOJI_MAP[label], advice_dict[label]
+

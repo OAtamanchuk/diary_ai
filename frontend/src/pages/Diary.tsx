@@ -37,13 +37,13 @@ export default function Diary() {
 
   useEffect(() => { fetchEntries() }, [])
 
-  const title = lang === 'uk' ? '📖 Мій щоденник' : '📖 My diary'
+  const title = lang === 'uk' ? 'Мій щоденник' : 'My diary'
 
   return (
-    <div className="max-w-4xl mx-auto p-6 relative">
-      <h1 className="text-2xl font-bold mb-4">{title}</h1>
+    <div className="min-h-screen bg-[#d1c7ff] dark:bg-gray-800 max-w-4xl mx-auto p-6 relative">
+      <h1 className="text-2xl text-center font-bold mb-8">{title}</h1>
 
-      <EntryForm onSubmit={handleNewEntry} />
+      <EntryForm onSubmit={handleNewEntry}/>
 
       {/* МОДАЛЬНОЕ ОКНО */}
       {advice && (
@@ -53,7 +53,7 @@ export default function Diary() {
         />
       )}
 
-      <div className="my-6">
+      <div className="my-12">
         <Calendar entries={entries} />
       </div>
     </div>

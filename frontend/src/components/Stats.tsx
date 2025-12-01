@@ -8,12 +8,12 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 
 // ⭐ Словарь переводов эмоций
 const emotionTranslations: Record<string, { uk: string; en: string }> = {
-  anger:     { uk: "Злість", en: "Anger" },
-  sadness:   { uk: "Смуток", en: "Sadness" },
-  joy:       { uk: "Радість", en: "Joy" },
-  fear:      { uk: "Страх", en: "Fear" },
-  love:      { uk: "Кохання", en: "Love" },
-  surprise:  { uk: "Подив", en: "Surprise" },
+  anger: { uk: "Злість", en: "Anger" },
+  sadness: { uk: "Смуток", en: "Sadness" },
+  joy: { uk: "Радість", en: "Joy" },
+  fear: { uk: "Страх", en: "Fear" },
+  love: { uk: "Кохання", en: "Love" },
+  surprise: { uk: "Подив", en: "Surprise" },
 }
 
 type Props = { small?: boolean }
@@ -48,16 +48,29 @@ export default function Stats({ small = false }: Props) {
   const size = small ? 440 : 600
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 rounded-lg space-y-4">
+    <div className="p-4 bg-[#E5DFFF] dark:bg-gray-800 rounded-[40px] space-y-4">
       <select
-        className="border p-2 rounded bg-gray-100 dark:bg-gray-700"
+        className="p-2 rounded-[10px] bg-[#6765FE] text-white"
         value={period}
         onChange={(e) => setPeriod(e.target.value as "month" | "year")}
       >
-        <option value="month">
+        <option
+          value="month"
+          style={{
+            backgroundColor: period === "month" ? "#3F3DBF" : "#6765FE",
+            color: "white",
+          }}
+        >
           {lang === "uk" ? "Останній місяць" : "Last month"}
         </option>
-        <option value="year">
+
+        <option
+          value="year"
+          style={{
+            backgroundColor: period === "year" ? "#3F3DBF" : "#6765FE",
+            color: "white",
+          }}
+        >
           {lang === "uk" ? "Останній рік" : "Last year"}
         </option>
       </select>

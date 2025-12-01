@@ -27,38 +27,42 @@ export default function Register() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg"
-    >
-      <h2 className="text-2xl font-bold mb-4">{texts.title}</h2>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder={texts.email}
-        className="w-full p-2 mb-3 border rounded"
-      />
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder={texts.name}
-        className="w-full p-2 mb-3 border rounded"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder={texts.password}
-        className="w-full p-2 mb-3 border rounded"
-      />
-      <button
-        type="submit"
-        className="w-full p-2 bg-green-600 text-white rounded"
+    <div className="min-h-screen flex justify-center bg-[#d1c7ff] dark:bg-gray-900 py-12">
+      <form
+        onSubmit={handleSubmit}
+        className="w-[900px] h-[526px] p-6 bg-[#e5dfff] dark:bg-gray-800 border-2 border-[#6765FE] rounded-[20px] shadow-md"
       >
-        {texts.button}
-      </button>
-    </form>
+        <h2 className="text-[40px] leading-none font-bold text-center mb-[30px]">{texts.title}</h2>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={texts.email}
+            className="w-[820px] h-[74px] text-[28px] leading-none box-border pl-6 mb-6 border border-[#6765FE] rounded-[10px] border-opacity-50 mx-auto block focus:border-black focus:ring-0 focus:outline-none transition-colors duration-150"
+          />
+          <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder={texts.name}
+          className="w-[820px] h-[74px] text-[28px] leading-none box-border pl-6 mb-6 border border-[#6765FE] rounded-[10px] border-opacity-50 mx-auto block focus:border-black focus:ring-0 focus:outline-none transition-colors duration-150"
+          />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder={texts.password}
+          className="w-[820px] h-[74px] text-[28px] leading-none box-border pl-6 mb-12 border border-[#6765FE] rounded-[10px] border-opacity-50 mx-auto block focus:border-black focus:ring-0 focus:outline-none transition-colors duration-150"
+          />
+        <div className="flex justify-center mt-6">
+          <button
+            type="submit"
+            className="w-[188px] h-[66px] text-[28px] font-semibold flex items-center justify-center bg-[#6765FE] text-white rounded-[10px] mx-auto"
+          >
+            {texts.button}
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }

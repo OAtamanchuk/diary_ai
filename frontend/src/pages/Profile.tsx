@@ -14,9 +14,9 @@ export default function Profile() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">{texts.title}</h1>
+      <h1 className="text-4xl text-[#1C0843] text-center font-bold">{texts.title}</h1>
 
-      <p className="text-lg text-gray-600 dark:text-gray-300">
+      <p className="text-lg text-black dark:text-gray-300">
         {texts.summary}
       </p>
 

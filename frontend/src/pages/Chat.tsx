@@ -46,22 +46,22 @@ export default function Chat() {
   }, [messages])
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        💬 {lang === "uk" ? "Чат" : "Chat"}
+    <div className="max-w-5xl mx-auto p-11">
+      <h1 className="text-4xl font-bold mb-11 text-center">
+        {lang === "uk" ? "Чат" : "Chat"}
       </h1>
 
       <div
         id="chat-scroll"
-        className="border p-4 h-80 overflow-y-auto mb-4 bg-white dark:bg-gray-800 rounded"
+        className="border p-4 h-96 overflow-y-auto mb-4 bg-[#E5DFFF] rounded-[20px] dark:bg-gray-800"
       >
         {messages.map((m, i) => (
           <div key={i} className={m.from === "user" ? "text-right mb-2" : "text-left mb-2"}>
             <span
               className={
                 m.from === "user"
-                  ? "inline-block px-3 py-2 rounded-xl bg-blue-600 text-white"
-                  : "inline-block px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-700 dark:text-white"
+                  ? "inline-block px-3 py-2 rounded-xl bg-[#6765FE] text-white max-w-[80%] break-words whitespace-pre-wrap"
+                  : "inline-block px-3 py-2 rounded-xl bg-[#BDAEFF] dark:bg-gray-700 dark:text-white max-w-[80%] break-words whitespace-pre-wrap"
               }
             >
               {m.text}
@@ -75,11 +75,11 @@ export default function Chat() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKey}
-          className="flex-1 p-2 border rounded"
+          className="flex-1 p-2 bg-[#E5DFFF] border border-[#1C0843] rounded-[10px]"
           placeholder={lang === "uk" ? "Напишіть повідомлення..." : "Type a message..."}
         />
 
-        <button onClick={send} className="px-4 py-2 bg-blue-600 text-white rounded">
+        <button onClick={send} className="px-6 py-2 bg-[#6765FE] text-white rounded-[10px]">
           {lang === "uk" ? "Надіслати" : "Send"}
         </button>
       </div>

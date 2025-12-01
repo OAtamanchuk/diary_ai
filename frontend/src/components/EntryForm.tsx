@@ -13,17 +13,20 @@ export default function EntryForm({ onSubmit }: { onSubmit: (text: string, lang:
   }
 
   return (
-    <div className="p-4 border rounded-lg">
+    <div className="w-[720px] mx-auto">
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder={lang === 'uk' ? "Як минув твій день?" : "How was your day?"}
-        className="w-full p-2 mt-2 border rounded"
+        placeholder={lang === 'uk' ? "Як минув твій день?" : "How do you feeling today...?"}
+        className="w-full p-4 pb-0 h-[220px] border-2 border-[#AC91FF] rounded-[20px]"
         rows={4}
       />
-      <button onClick={handleSubmit} className="mt-2 px-4 py-2 bg-blue-600 text-white rounded">
-        {lang === 'uk' ? "Зберегти" : "Save"}
-      </button>
+      <div className="flex justify-center mt-4">
+        <button onClick={handleSubmit} className="px-8 py-2 bg-[#6765FE] text-white rounded-[10px] hover:bg-[#5f5cf5]">
+          {lang === 'uk' ? "Зберегти" : "Save"}
+        </button>
+      </div>
     </div>
+    
   )
 }

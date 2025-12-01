@@ -1,12 +1,61 @@
+@font-face {
+  font-family: 'ABeeZee';
+  src: url('./assets/fonts/ABeeZee-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --font-abeeze: 'ABeeZee', "sans-serif";
+  background: #d1c7ff;
+  --fc-page-bg-color: #AC91FF;
+  --fc-today-bg-color: #c6bbfa !important;
+  --fc-border-color: black;
+  --fc-scrollgrid-sync-inner-color: black;
+}
+
+
 .fc-event {
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
 }
 
-.fc-daygrid-event-dot {
-  display: none !important;
+
+.fc .fc-button-primary:disabled{
+  background: #6765FE;
+  opacity: 0.5;
 }
+
+.fc .fc-button-primary{
+  width: 80px;
+  height: 45px;
+  border-radius: 10px;
+  background: #1C0843;
+  border: none;
+}
+
+.fc .fc-button-primary:hover{
+  background: #150633;
+}
+
+.fc .fc-today-button{
+  width: 90px;
+  height: 45px;
+  border-radius: 10px;
+  background: #6765FE;
+}
+
+.fc .fc-today-button:hover{
+  background: #574FFD;
+}
+
+.fc-toolbar-title {
+  font-weight: 700;
+}
+

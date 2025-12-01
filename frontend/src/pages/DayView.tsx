@@ -81,7 +81,7 @@ export default function DayView() {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <button onClick={() => navigate('/diary')} className="text-blue-600 mb-4">
+      <button onClick={() => navigate('/diary')} className="w-[100px] h-[50px] text-[20px] font-semibold flex items-center justify-center bg-[#6765FE] text-white rounded-[10px] mb-4">
         {texts.back}
       </button>
 

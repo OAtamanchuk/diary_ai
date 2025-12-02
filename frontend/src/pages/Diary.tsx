@@ -41,11 +41,10 @@ export default function Diary() {
 
   return (
     <div className="min-h-screen bg-[#d1c7ff] dark:bg-gray-800 max-w-4xl mx-auto p-6 relative">
-      <h1 className="text-2xl text-center font-bold mb-8">{title}</h1>
+      <h1 className="text-4xl text-center font-bold mb-8">{title}</h1>
 
       <EntryForm onSubmit={handleNewEntry}/>
 
-      {/* МОДАЛЬНОЕ ОКНО */}
       {advice && (
         <AdviceModal
           advice={advice}

@@ -13,7 +13,6 @@ def get_stats(period: str = "month",
               db: Session = Depends(get_db),
               user: User = Depends(get_current_user)):
 
-    # диапазон времени
     now = datetime.utcnow()
     
     if period == "month":
@@ -23,7 +22,6 @@ def get_stats(period: str = "month",
     else:
         start_date = now - timedelta(days=30)
 
-    # записи пользователя за период
     entries = (
         db.query(Entry)
         .filter(Entry.user_id == user.id)
@@ -31,7 +29,6 @@ def get_stats(period: str = "month",
         .all()
     )
 
-    # считаем эмоции
     emotions = {}
     for e in entries:
         if e.emotion_label:

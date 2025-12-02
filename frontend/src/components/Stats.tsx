@@ -6,7 +6,6 @@ import { useLang } from '../context/LanguageContext'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-// ⭐ Словарь переводов эмоций
 const emotionTranslations: Record<string, { uk: string; en: string }> = {
   anger: { uk: "Злість", en: "Anger" },
   sadness: { uk: "Смуток", en: "Sadness" },

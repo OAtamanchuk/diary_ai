@@ -15,11 +15,9 @@ export default function Header() {
     logout: lang === 'uk' ? 'Вихід' : 'Log out',
   }
 
-  // === 2️⃣ Обычный хедер
   return (
     <header className="w-full h-24 bg-[#AC91FF] dark:bg-gray-900 shadow">
       <div className="max-w-6xl mx-auto flex justify-between items-center pt-[15px]">
-        {/* Left side: Logo + Navigation */}
         <div className='flex justify-start items-center gap-[120px]'>
           <div className='flex justify-start items-center gap-3'>
             <img src={Logo} alt="Flowly logo" className='w-12 h-12'/>
@@ -28,7 +26,6 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Navigation - only show if user is logged in */}
           {user && (
             <nav className="flex gap-[52px] text-[24px] text-white leading-none">
               <Link to="/diary" className="hover:text-blue-600">
@@ -43,8 +40,7 @@ export default function Header() {
             </nav>
           )}
         </div>
-        
-        {/* Right side: Logout and Language Toggle */}
+
         {!user ? (
           <LanguageToggle />
         ) : (

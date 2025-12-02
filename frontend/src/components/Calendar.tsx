@@ -7,7 +7,6 @@ import { useLang } from "../context/LanguageContext";
 import ukLocale from "@fullcalendar/core/locales/uk";
 import enLocale from "@fullcalendar/core/locales/en-gb";
 
-// кастомные SVG-эмодзи
 import anger from "../assets/emojis/anger.svg";
 import fear from "../assets/emojis/fear.svg";
 import joy from "../assets/emojis/joy.svg";
@@ -15,7 +14,6 @@ import love from "../assets/emojis/love.svg";
 import sadness from "../assets/emojis/sadness.svg";
 import surprise from "../assets/emojis/surprise.svg";
 
-// id эмоции -> svg
 const emojiMap: Record<string, string> = {
   anger,
   fear,
@@ -25,7 +23,6 @@ const emojiMap: Record<string, string> = {
   surprise,
 };
 
-// юникод эмодзи -> id эмоции (так работаю старые записи)
 const unicodeToId: Record<string, string> = {
   "😢": "sadness",
   "😀": "joy",
@@ -46,13 +43,11 @@ export default function Calendar({ entries }: { entries: Entry[] }) {
   const navigate = useNavigate();
   const { lang } = useLang();
 
-  // 📌 1. ГРУППИРУЕМ эмоции по датам (чтобы был массив)
   const grouped: Record<string, string[]> = {};
 
   entries.forEach((e) => {
     if (!grouped[e.date]) grouped[e.date] = [];
 
-    // определяем ID эмоции
     let emotionId: string | undefined = undefined;
 
     if (e.emoji) {
@@ -67,10 +62,9 @@ export default function Calendar({ entries }: { entries: Entry[] }) {
     if (emotionId) grouped[e.date].push(emotionId);
   });
 
-  // 📌 2. Превращаем группы в события календаря
   const events = Object.entries(grouped).map(([date, emotions]) => ({
     date,
-    emotions, // передаём массив
+    emotions, 
     allDay: true,
   }));
 
@@ -78,7 +72,6 @@ export default function Calendar({ entries }: { entries: Entry[] }) {
     navigate(`/day/${info.dateStr}`);
   };
 
-  // 📌 3. Отрисовка нескольких смайлов по 2-3 в ряд
   const renderEventContent = (arg: any) => {
     const emotions: string[] = arg.event.extendedProps.emotions;
 
@@ -88,7 +81,7 @@ export default function Calendar({ entries }: { entries: Entry[] }) {
       <div
         className="grid gap-1 justify-center"
         style={{
-          gridTemplateColumns: "repeat(3, 1fr)", // по 3 смайла в строке
+          gridTemplateColumns: "repeat(3, 1fr)", 
         }}
       >
         {emotions.map((emotion: string, index: number) => {
@@ -116,7 +109,7 @@ export default function Calendar({ entries }: { entries: Entry[] }) {
       eventContent={renderEventContent}
       eventDisplay="block"
       locales={[ukLocale, enLocale]}
-      locale={lang === "uk" ? "uk" : "en-gb"} // <-- ПЕРЕВОД МЕСЯЦЕВ И ДНЕЙ
+      locale={lang === "uk" ? "uk" : "en-gb"} 
     />
   );
 }

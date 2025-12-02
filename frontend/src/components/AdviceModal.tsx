@@ -24,7 +24,7 @@ export default function AdviceModal({
 
         <button
           onClick={onClose}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-[#6765FE] text-white rounded-[10px] hover:bg-[#5f5cf5] text-white"
         >
             {lang === 'uk' ? 'Дякую' : 'Thanks'}
         </button>

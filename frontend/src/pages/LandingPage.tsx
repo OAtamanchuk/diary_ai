@@ -69,7 +69,6 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#d1c7ff] dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 
       text-gray-800 dark:text-gray-200">
 
-      {/* HERO */}
       <section className="text-center pt-24 pb-20 px-4 animate-fadeIn">
         <h1 className="text-8xl leading-[135%] font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-[#1C0843] via-[#6C66FC] to-[#E978C7] mb-5">
           {t.heroTitle}
@@ -103,7 +102,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FEATURES */}
       <section className="max-w-[1520px] mx-auto px-6 mt-16">
         <h2 className="text-[64px] font-bold text-center">
           {t.featuresTitle}
@@ -111,7 +109,6 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-y-10 gap-x-12 pt-10">
 
-          {/* Feature card */}
           {[
             {
               icon: SparklesIcon,
@@ -148,7 +145,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="w-full h-[585px] text-center bg-gradient-to-r from-[#3D35FD] to-[#E978C7] text-white mt-[135px] mb-24 pt-[96px]">
         <HeartIcon className="h-20 w-20 mx-auto opacity-90 animate-pulse mb-9"/>
 

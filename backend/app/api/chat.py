@@ -8,7 +8,6 @@ router = APIRouter()
 
 
 def detect_lang(text: str):
-    """Визначає мову користувача."""
     try:
         lang = langdetect.detect(text)
         return "uk" if lang.startswith("uk") else "en"
@@ -17,7 +16,6 @@ def detect_lang(text: str):
 
 
 def short_text(text: str, limit=220):
-    """Обрізання відповіді моделі, щоб не писала простирадла."""
     if len(text) <= limit:
         return text
     return text[:limit].rsplit(" ", 1)[0] + "..."
@@ -26,7 +24,7 @@ def short_text(text: str, limit=220):
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     token = websocket.query_params.get("token")
-    page_lang = websocket.query_params.get("lang", "uk")  # <-- язык страницы
+    page_lang = websocket.query_params.get("lang", "uk") 
 
     if not token:
         await websocket.close()
@@ -44,16 +42,13 @@ async def websocket_endpoint(websocket: WebSocket):
             try:
                 user_msg = await websocket.receive_text()
 
-                # авто-визначення мови повідомлення
                 msg_lang = detect_lang(user_msg)
 
-                # переклад → англійською (якщо треба)
                 if msg_lang == "uk":
                     translated = GoogleTranslator(source="uk", target="en").translate(user_msg)
                 else:
                     translated = user_msg
 
-                # строгий промпт для моделі
                 system_instruction = (
                     "You are an empathetic but concise assistant. "
                     "Always respond in ENGLISH only. "
@@ -71,10 +66,6 @@ async def websocket_endpoint(websocket: WebSocket):
                 r = await client.post("http://host.docker.internal:11434/api/generate", json=payload)
                 raw = r.json().get("response", "").strip()
 
-                # обрізаємо занадто довгі відповіді
-                #raw = short_text(raw)
-
-                # переклад назад у мову сторінки
                 if page_lang == "uk":
                     final_text = GoogleTranslator(source="en", target="uk").translate(raw)
                 else:

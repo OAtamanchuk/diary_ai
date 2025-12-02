@@ -27,7 +27,7 @@ export default function Chat() {
 
     setWs(socket)
     return () => socket.close()
-  }, [lang])  // <- пересоздаём WS при смене языка !
+  }, [lang])  
 
   const send = () => {
     if (!ws || !input.trim()) return

@@ -32,10 +32,8 @@ async def create_entry(
 ):
     lang = entry_in.lang if entry_in.lang != "auto" else "en"
 
-    # 1️⃣ Анализируем эмоции ДО записи
     label, score, emoji, advice = predict_emotion(entry_in.text, lang)
 
-    # 2️⃣ Создаём запись с уже готовыми эмоциями
     entry = Entry(
         text=entry_in.text,
         date=entry_in.date or date.today(),

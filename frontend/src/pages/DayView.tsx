@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { api } from '../services/api'
 import { useLang } from '../context/LanguageContext'
 
-// 📌 Импортируем кастомные SVG эмодзи
 import anger from '../assets/emojis/anger.svg'
 import fear from '../assets/emojis/fear.svg'
 import joy from '../assets/emojis/joy.svg'
@@ -11,7 +10,6 @@ import love from '../assets/emojis/love.svg'
 import sadness from '../assets/emojis/sadness.svg'
 import surprise from '../assets/emojis/surprise.svg'
 
-// 📌 Маппинг ID -> SVG
 const emojiMap: Record<string, string> = {
   anger,
   fear,
@@ -21,7 +19,6 @@ const emojiMap: Record<string, string> = {
   surprise,
 }
 
-// 📌 Старые Unicode -> ID
 const unicodeToId: Record<string, string> = {
   "😢": "sadness",
   "😀": "joy",
@@ -63,17 +60,13 @@ export default function DayView() {
     delete: lang === 'uk' ? 'Видалити' : 'Delete',
   }
 
-  // 📌 Функция, которая определяет ID эмоции и возвращает путь к SVG
   const getEmojiIcon = (emoji: string | null, emotionLabel: string | null) => {
     if (!emoji && !emotionLabel) return null
 
-    // если это уже ID (joy, sadness…)
     if (emoji && emojiMap[emoji]) return emojiMap[emoji]
 
-    // если это Unicode старый
     if (emoji && unicodeToId[emoji]) return emojiMap[unicodeToId[emoji]]
 
-    // если в БД есть emotion_label
     if (emotionLabel && emojiMap[emotionLabel]) return emojiMap[emotionLabel]
 
     return null
@@ -102,10 +95,9 @@ export default function DayView() {
                 key={e.id}
                 className="p-4 border rounded bg-white dark:bg-gray-800 text-left shadow"
               >
-                <p className="text-lg">{e.text}</p>
+                <p className="text-lg mb-4">{e.text}</p>
 
-                {/* 💜 SVG emoji + advice */}
-                <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
+                <p className="text-sm text-gray-500 mt-2 flex items-center gap-2 mb-4">
                   {icon && (
                     <img
                       src={icon}
